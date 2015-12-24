@@ -2,6 +2,7 @@
 ##使用方法 :
 ```javascript
 //javascript
+//$("#xxx") 为想要放入的容器
 $("#xxx").jLoad({
   url:'xxx.html', //请求
   data:{},//ajax的data
@@ -30,3 +31,5 @@ var jload = $("#xxx").jLoad({...});
 //data为新的json查询数据，目的是做列表删选时使用
 jload.reload(data);
 ```
+
+    第一次做插件，代码中也有很多不合理的地方，希望大家多多指正
