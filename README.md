@@ -5,6 +5,8 @@
 $("#xxx").jLoad({
   url:'xxx.html', //请求
   data:{},//ajax的data
+  //scroll 可选参数，true或者不填为监听滚动到底部时发起请求，false则为底部的点击加载更多发起请求
+  scroll:false,
   //回调函数的两个参数：data是发起ajax请求返回的data，postData为ajax请求的data，也就是上一行的data
   callback:function(data,postData){
     //返回对象(可以为任意名字)
