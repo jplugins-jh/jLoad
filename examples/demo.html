@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>jLoad插件</title>
+	<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="../jLoad.js"></script>
+</head>
+<body>
+<h1>jload插件</h1>
+<div id="scroller">
+	
+</div>
+<script type="text/javascript">
+$('#scroller').jLoad({
+	url:'https://www.baidu.com/',
+	data:null,
+	scroll:false,
+	callback:function(data, postData) {
+		var retData = {};
+		retData.isEnd = false;
+		retData.postData = postData;
+		retData.retData  = $('<h1>jLoad</h1>');
+	}
+});
+</script>
+</body>
+</html>

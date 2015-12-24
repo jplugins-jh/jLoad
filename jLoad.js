@@ -12,22 +12,15 @@
 				//滚动：默认开启
 				scroll:true,
 				
-				//请求
-				//url:"",
-				
-				//请求post参数
-				//data:"",
-				
-				//请求完成的回调
-				//callback:"",
-				
 				//默认json格式
 				dataType:"JSON",
+
+				data:{},
 				
 				//默认提交方式POST
 				type:"POST",
 				
-				//生成的默认文字
+				//默认文字
 				loading_text:"加载中...",
 				click_text:"点击加载更多",
 				tip:"loading...",
@@ -36,8 +29,8 @@
 			}
 			
 			//重新加载
-			jl.reLoad = function(newData) {
-				jl.data = newData;
+			jl.reLoad = function() {
+				if(arguments.length != 0) jl.data = arguments[0];
 				jl.doc.empty();
 				jl.post();
 			}
