@@ -1,9 +1,6 @@
-/**
+﻿/**
  * @author chenkailun
  * @date 2015-12-17 15:04
- * @discription 该插件用做移动端查询列表时使用，开发者调用时参数传入：发起的请求url，数据data,以及回调函数callback，
- * callback需要返回被放入的jquery实例，例如：$("#"),调用方式为$("xxx").jLoad({url:"xx",data:{}/null,callback:function});
- * callback的返回值需要返回一个json对象,包含一个{retData:"存放需要放入的jquery对象",isEnd："boolean值，true为最后一页"}
  */
 (function(window,document,$) {
 	$.extend($.fn, {
@@ -12,8 +9,8 @@
 			var jl = {
 				doc:$(this),
 				
-				//滑动：默认开启 , 要默认关闭请取消scoll注释
-				//scoll:true,
+				//滚动：默认开启
+				scroll:true,
 				
 				//请求
 				//url:"",
@@ -35,7 +32,14 @@
 				click_text:"点击加载更多",
 				tip:"loading...",
 				tipError:"异常",
-				nomore:"没有了"
+				nomore:"没有更多数据了"
+			}
+			
+			//重新加载
+			jl.reLoad = function(newData) {
+				jl.data = newData;
+				jl.doc.empty();
+				jl.post();
 			}
 			
 			//参数覆盖
@@ -47,6 +51,9 @@
 				jl.loading = $("<p></p>");
 				jl.loading.text(jl.tip);
 				jl.loading.css({"text-align":"center","padding":"1em 0"});
+				
+				//滚动监听锁
+				jl.scrollLock = true;
 			}
 			
 			//加载中函数,true表示显示，false不显示
@@ -64,9 +71,6 @@
 			
 			//发起ajax请求调用传入回调函数
 			jl.post = function() {
-				console.log("url:"+jl.url);
-				console.log(jl.data);
-				console.log(jl.callback);
 				$.ajax({
 					url:jl.url,
 					type:"POST",
@@ -78,31 +82,30 @@
 					success:function(data) {
 						//关闭加载
 						jl.showLoading(false);
-						
 						//调用回调函数
-						var retData = jl.callback(data);
-						
+						var retData = jl.callback(data,jl.data);
 						//返回的对象添加到目标容器
 						jl.doc.append(retData.retData);
-						
+						//修改锁为可以使用
+						jl.scrollLock = true;
+						//刷新返回的data
+						jl.data = retData.postData;
 						if(retData.isEnd) {//最后一页
 							jl.loading.text(jl.nomore);
 							jl.showLoading();
-							console.log("最后一页");
 						}else{//不是最后一页
 							jl.loading.text(jl.loading_text);
 							jl.showLoading();
-							//重新绑定监听事件
+							//重新绑定事件，延时1秒
 							jl.bindEvent();
-							console.log("不是最后一页");
 						}
 					}
 				});
 			}
 			
-			//根据scoll参数设置滚动监听或者点击事件
+			//根据scroll参数设置滚动监听或者点击事件
 			jl.bindEvent = function () {
-				if(typeof jl.scoll == "undefined" || jl.scoll) {
+				if(jl.scroll) {
 					jl.bindRoll();
 				}else{
 					jl.loading.text(jl.click_text);
@@ -113,16 +116,14 @@
 			//点击加载事件
 			jl.click = function () {
 				
-				console.log("进入点击事件");
+				//去掉点击事件
+				jl.bindClick(false);
 				
 				//修改加载中文字
 				jl.loading.text(jl.loading_text);
 				
 				//显示加载中
 				jl.showLoading();
-				
-				//解绑事件
-				jl.bindClick(false);
 				
 				//发起请求
 				jl.post();
@@ -148,22 +149,21 @@
 			}
 			
 			//滑动事件
-			jl.roll = function () {
-				
+			jl.roll = function (event) {
+				event.cancelBubble = true;
 				var clientHeight = document.documentElement.clientHeight;
 				var scrollTop = document.body.scrollTop;
 				var scrollHeight = document.body.scrollHeight;
 				
 				if(clientHeight + scrollTop == scrollHeight){
-					
-					//显示loading
-					jl.showLoading();
-					
-					//发起请求
-					jl.post();
-					
-					//解绑事件
-					jl.bindRoll(false);
+					if(jl.scrollLock) {
+						jl.scrollLock = false;
+						jl.bindRoll(false);
+						//显示loading
+						jl.showLoading();
+						//发起请求
+						jl.post();
+					}
 				}
 			}
 			
@@ -181,6 +181,17 @@
 				}
 			}
 			
+			//加载一次
+			jl.load = function () {
+				
+				if(jl.scroll) {
+					jl.roll();
+				}else{
+					jl.loading.text(jl.click_text);
+					jl.click();
+				}
+			}
+			
 			//初始化jLoad
 			jl.init = function() {
 				
@@ -190,9 +201,13 @@
 				//绑定事件
 				jl.bindEvent();
 				
+				//加载一次数据
+				jl.post();
 			}
 			
 			jl.init();
+			
+			return jl;
 		}
 	});
 })(this,document,jQuery);
