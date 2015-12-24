@@ -32,4 +32,3 @@ var jload = $("#xxx").jLoad({...});
 jload.reload(data);
 ```
 
-    第一次做插件，代码中也有很多不合理的地方，希望大家多多指正
