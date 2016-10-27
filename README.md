@@ -1,4 +1,4 @@
-# jLoad
+dataType为text时返回的数据将直接放到容器中，不指定或指定dataType为json时，返回数据为json，需要在回调函数中手动构造dom对象# jLoad
 ##使用方法 :
 ```javascript
 //javascript
@@ -31,4 +31,7 @@ var jload = $("#xxx").jLoad({...});
 //data为新的json查询数据，目的是做列表删选时使用
 jload.reload(data);
 ```
+
+###指定dataType
+初始化参数中指定dataType，dataType为text时返回的数据将直接放到容器中，这时候回调函数中不需要返回retData.retData。不指定或指定dataType为json时，返回数据为json，需要在回调函数中手动构造dom对象
 
