@@ -1,4 +1,5 @@
 ##使用方法 :
+###初始化
 ```javascript
 //javascript
 //$("#xxx") 为想要放入的容器
@@ -23,6 +24,7 @@ $("#xxx").jLoad({
     return retData;
   }
 });
+###jLoad对象
 ```
 jLoad还会返回jLoad所包含的一个全局对象，该对象可以调用重新加载的方法来重新刷新当前页面
 ```javascript
