@@ -1,4 +1,3 @@
-dataType为text时返回的数据将直接放到容器中，不指定或指定dataType为json时，返回数据为json，需要在回调函数中手动构造dom对象# jLoad
 ##使用方法 :
 ```javascript
 //javascript
