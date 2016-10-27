@@ -13,14 +13,20 @@
 </div>
 <script type="text/javascript">
 $('#scroller').jLoad({
-	url:'https://www.baidu.com/',
-	data:null,
+	url:'http://localhost/home/test/testView',
+	data:{},
+	dataType:"json",
 	scroll:false,
 	callback:function(data, postData) {
+		//回调函数必须返回一个js对象
 		var retData = {};
+		//isEnd用于判断是否是最后一页
 		retData.isEnd = false;
+		//postData为查询参数，例如可以把原来的查询参数的页码加1
 		retData.postData = postData;
+		//手动构造的对象，用于添加到容器，如果返回页面，则不用构造该对象
 		retData.retData  = $('<h1>jLoad</h1>');
+		return retData;
 	}
 });
 </script>

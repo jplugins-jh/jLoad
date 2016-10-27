@@ -28,15 +28,18 @@
 				nomore:"没有更多数据了"
 			}
 			
+			//默认返回json格式数据
+			jl.dataType = jl.dataType || "JSON";
+
+			//参数覆盖
+			var jl = $.extend(jl,setting);
+
 			//重新加载
 			jl.reLoad = function() {
 				if(arguments.length != 0) jl.data = arguments[0];
 				jl.doc.empty();
 				jl.post();
 			}
-			
-			//参数覆盖
-			var jl = $.extend(jl,setting);
 			
 			//初始化插件需要的dom
 			jl.initObjects = function () {
@@ -77,8 +80,15 @@
 						jl.showLoading(false);
 						//调用回调函数
 						var retData = jl.callback(data,jl.data);
-						//返回的对象添加到目标容器
-						jl.doc.append(retData.retData);
+						if(jl.dataType == 'JSON' || jl.dataType == 'json') {
+							//返回的对象添加到目标容器
+							jl.doc.append(retData.retData);
+						}else if(jl.dataType == 'text'){
+							//如果返回html对象直接添加到容器
+							jl.doc.append(data);
+						}else{
+							throw new error("not support such return type : jl.dataType");
+						}
 						//修改锁为可以使用
 						jl.scrollLock = true;
 						//刷新返回的data
