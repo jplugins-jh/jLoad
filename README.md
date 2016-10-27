@@ -24,8 +24,8 @@ $("#xxx").jLoad({
     return retData;
   }
 });
-###jLoad对象
 ```
+###jLoad对象
 jLoad还会返回jLoad所包含的一个全局对象，该对象可以调用重新加载的方法来重新刷新当前页面
 ```javascript
 var jload = $("#xxx").jLoad({...});
